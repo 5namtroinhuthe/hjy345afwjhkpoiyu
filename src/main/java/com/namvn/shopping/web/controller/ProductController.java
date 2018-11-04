@@ -72,7 +72,7 @@ public class ProductController {
     @RequestMapping(UrlAddress.PRODUCT_GET_ID)
     public ModelAndView getProductById(@PathVariable(value = "productId") String productId) {
         ProductInfo product = productService.getProductById(productId);
-        return new ModelAndView("productPage", "productObj", product);
+        return new ModelAndView("single-product-details", "productObj", product);
     }
 
     @RequestMapping(value = UrlAddress.PRODUCT_ADD, method = RequestMethod.POST)

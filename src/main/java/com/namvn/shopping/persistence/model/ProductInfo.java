@@ -8,13 +8,30 @@ public class ProductInfo {
     private float prices;
     private String manufacturer;
     private String sale;
+    private String size;
+    private String color;
+    private String detail;
     private String productId;
+
+    public ProductInfo(String name, String image, String detail, float priceNew, float prices, String manufacturer, String size, String color, String productId) {
+        this.name = name;
+        this.image = image;
+        this.detail = detail;
+        this.priceNew = priceNew;
+        this.prices = prices;
+        this.manufacturer = manufacturer;
+        this.size = size;
+        this.color = color;
+        this.productId = productId;
+    }
+
     public ProductInfo(String productId, String name, float priceNew, float prices) {
         this.productId = productId;
         this.name = name;
         this.priceNew = priceNew;
         this.prices = prices;
     }
+
     public ProductInfo(String productId, String name, String image, float priceNew, float prices) {
         this.productId = productId;
         this.name = name;
@@ -23,12 +40,30 @@ public class ProductInfo {
         this.prices = prices;
     }
 
-    public ProductInfo(String name, String image, float prices,float priceNew,  String manufacturer) {
+    public ProductInfo(String productId, String name, String image, float prices, float priceNew, String manufacturer) {
+        this.productId = productId;
         this.name = name;
         this.image = image;
+
         this.prices = prices;
         this.priceNew = priceNew;
         this.manufacturer = manufacturer;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getManufacturer() {
@@ -85,5 +120,13 @@ public class ProductInfo {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

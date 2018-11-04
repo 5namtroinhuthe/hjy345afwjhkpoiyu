@@ -6,7 +6,7 @@ public class ProductContants {
     public static final String PRICE_DESC = "price_desc";
     public static final String PRICE_DATE = "price_date";
     //---------PRODUCT PREDICATE
-    public static final String PRODUCT_ID = "product_id";
+    public static final String PRODUCT_ID = "productId";
     public static final String NAME = "name";
     public static final String PRICE_NEW = "priceNew";
     public static final String PRICES = "prices";

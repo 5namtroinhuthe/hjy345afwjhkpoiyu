@@ -13,9 +13,22 @@
 
     <!-- Favicon  -->
 
+    <script>
+        $(document).ready(function () {
+            $(".color1").click(function () {
+                $(".color1").attr("href", a1());
+            });
+        });
+      function  a1(){
+            let color = new Predicate(colors, 'colorList');
+            let list = color.handleClick('trang', 'trangClick');
+            let href = new PreProcesssingUrl(list, sizes, manufacturers, materials, madeIns).calUrl();
+           return href;
+        }
+    </script>
     <!-- Core Style CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/core-style.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/static/style.css}">-->
     <link rel="icon" th:href="@{/static/img/core-img/favicon.ico}">
 </head>
 
@@ -307,16 +320,16 @@
                         <p class="widget-title2 mb-30">Color</p>
                         <div class="widget-desc">
                             <ul class="d-flex">
-                                <li class="color-product"><a href="#" class="color1"></a></li>
-                                <li class="color-product"><a href="#" class="color2"></a></li>
-                                <li class="color-product"><a href="#" class="color3"></a></li>
-                                <li class="color-product"><a href="#" class="color4"></a></li>
-                                <li class="color-product"><a href="#" class="color5"></a></li>
-                                <li class="color-product"><a href="#" class="color6"></a></li>
-                                <li class="color-product"><a href="#" class="color7"></a></li>
-                                <li class="color-product"><a href="#" class="color8"></a></li>
-                                <li class="color-product"><a href="#" class="color9"></a></li>
-                                <li class="color-product"><a href="#" class="color10"></a></li>
+                                <li class="color-product"><a class="color1" href="#"></a></li>
+                                <li class="color-product"><a class="color2"></a></li>
+                                <li class="color-product"><a class="color3"></a></li>
+                                <li class="color-product"><a class="color4"></a></li>
+                                <li class="color-product"><a class="color5"></a></li>
+                                <li class="color-product"><a class="color6"></a></li>
+                                <li class="color-product"><a class="color7"></a></li>
+                                <li class="color-product"><a class="color8"></a></li>
+                                <li class="color-product"><a class="color9"></a></li>
+                                <li class="color-product"><a class="color10"></a></li>
                             </ul>
                         </div>
                     </div>
@@ -364,10 +377,10 @@
                         </div>
                     </div>
 
-                    <div class="row" >
+                    <div class="row">
                         <!-- Single Product -->
                         <div class="col-12 col-sm-6 col-lg-4" th:each="pro:${products.getList()}" >
-                            <div class="single-product-wrapper" >
+                            <div class="single-product-wrapper">
                                 <!-- Product Image -->
                                 <div class="product-img">
                                     <img th:src="${pro.getImage()}" alt="">
@@ -389,10 +402,12 @@
                                 <!-- Product Description -->
                                 <div class="product-description">
                                     <span th:utext="${pro.getManufacturer()}"></span>
-                                    <a href="single-product-details.html">
-                                        <h6 th:utext="${pro.getName()}"></h6>
+                                    <a th:href="@{'/product/getId/'+${pro.getProductId()}}" alt="">
+                                        <h6 th:utext="${pro.getName()}" ></h6>
                                     </a>
-                                    <p class="product-price" th:utext="${pro.getPriceNew()}+'N'"><span class="old-price" th:utext="${pro.getPrices()}+'N'"></span> </p>
+                                    <p class="product-price" th:utext="${pro.getPriceNew()}+'N'"><span class="old-price"
+                                                                                                       th:utext="${pro.getPrices()}+'N'"></span>
+                                    </p>
 
                                     <!-- Hover Content -->
                                     <div class="hover-content">
@@ -408,14 +423,15 @@
                 </div>
                 <!-- Pagination -->
                 <nav aria-label="navigation">
-                    <ul class="pagination mt-50 mb-70" >
+                    <ul class="pagination mt-50 mb-70">
                         <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a></li>
                         <li class="page-item" th:each="page:${products.getNavPages()}">
-                            <a th:if="${page != -1 }" class="page-link"  th:href="@{'/product/get?page='+${page}}" th:utext="${page}"></a>
+                            <a th:if="${page != -1 }" class="page-link" th:href="@{'/product/get?page='+${page}}"
+                               th:utext="${page}"></a>
                             <span th:if="${page == -1}" class="page-link" th:utext="..."></span>
                         </li>
                         <!--<li class="page-item"><a class="page-link" href="#"><span th:utext="..."></span></a></li>-->
-                        <li class="page-item" ><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
                     </ul>
                 </nav>
             </div>
@@ -523,7 +539,7 @@
 <!-- Active js -->
 <script type="text/javascript" th:src="@{/static/js/active.js}"></script>
 <!-- Local Storage js -->
-<script type="text/css" th:src="@{/static/js/local-storage.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/local-storage.js}"></script>
 </body>
 
 </html>

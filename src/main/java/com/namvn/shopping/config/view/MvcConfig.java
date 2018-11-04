@@ -2,14 +2,13 @@ package com.namvn.shopping.config.view;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.servlet.config.annotation.*;
 
 /**
  * Class used to config view abc.html...(web)
  * Base on{@code org.springframework.web.WebMvcConfigurer} interface
- *
- *  how to add view(.html) to controler
+ * <p>
+ * how to add view(.html) to controler
  */
 @Configuration
 @EnableWebMvc
@@ -41,7 +40,11 @@ public class MvcConfig implements WebMvcConfigurer {
                 "/static/img/core-img/**",
                 "/static/img/product-img/**",
                 "/static/js/**",
-                "/static/scss/**")
+                "/static/modal_login/css/**",
+                "/static/modal_login/fonts/**",
+                "/static/modal_login/js/vendor/**",
+                "/static/scss/**"
+                )
                 .addResourceLocations(
 //                        "classpath:/META-INF/resources/webjars/",
                         "classpath:/static/css/",
@@ -50,6 +53,9 @@ public class MvcConfig implements WebMvcConfigurer {
                         "classpath:/static/img/core-img/",
                         "classpath:/static/img/product-img/",
                         "classpath:/static/js/",
+                        "classpath:/static/modal_login/css/",
+                        "classpath:/static/modal_login/fonts/",
+                        "classpath:/static/modal_login/js/vendor/",
                         "classpath:/static/scss/");
     }
 }

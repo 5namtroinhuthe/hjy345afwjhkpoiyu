@@ -167,7 +167,9 @@ public class ProductDaoImpl implements ProductDao {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<ProductInfo> criteriaQuery = builder.createQuery(ProductInfo.class);
         Root<Product> root = criteriaQuery.from(Product.class);
-        criteriaQuery.multiselect(root.get(ProductContants.NAME),
+        criteriaQuery.multiselect(
+                root.get(ProductContants.PRODUCT_ID),
+                root.get(ProductContants.NAME),
                 root.get(ProductContants.IMAGE),
                 root.get(ProductContants.PRICES),
                 root.get(ProductContants.PRICE_NEW),
@@ -244,7 +246,7 @@ public class ProductDaoImpl implements ProductDao {
         // select * from Product where isbn=i
         Product product = session.get(Product.class, productId);
 
-        return new ProductInfo(product.getProductId(), product.getName(), product.getPriceNew(), product.getPriceNew());
+        return new ProductInfo(product.getName(),product.getImage(),product.getDetail(),product.getPriceNew(),product.getPrices(),product.getManufacturer(),product.getSize(),product.getColor(),product.getProductId());
 
     }
 
