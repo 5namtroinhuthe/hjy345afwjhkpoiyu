@@ -26,7 +26,7 @@ public class FeedBackController {
         mFeedBackService.add(feedBack);
         model.addAttribute("querySuccess",
                 "Thank you, Your Message stored in our Server we will contact through corresponding Mail");
-        return "login";
+        return "register";
 
     }
 }

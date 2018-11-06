@@ -41,13 +41,12 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
 
-
     @Autowired
     private SessionRegistry sessionRegistry;
 
-    public static  String TOKEN_INVALID = "invalidToken";
-    public static  String TOKEN_EXPIRED = "expired";
-    public static  String TOKEN_VALID = "valid";
+    public static String TOKEN_INVALID = "invalidToken";
+    public static String TOKEN_EXPIRED = "expired";
+    public static String TOKEN_VALID = "valid";
 
     public static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
     public static String APP_NAME = "SpringRegistration";
@@ -60,19 +59,16 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException("There is an account with that email adress: " + accountDto.getEmail());
         }
         User user = new User();
-
-        user.setFirstName(accountDto.getFirstName());
-        user.setLastName(accountDto.getLastName());
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
         // user.setUsing2FA(accountDto.isUsing2FA());
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
-         repository.addUser(user);
+        repository.addUser(user);
     }
 
     @Override
-    public User getUser( String verificationToken) {
-         VerificationToken token = tokenRepository.findByToken(verificationToken);
+    public User getUser(String verificationToken) {
+        VerificationToken token = tokenRepository.findByToken(verificationToken);
         if (token != null) {
             return token.getUser();
         }
@@ -80,24 +76,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public VerificationToken getVerificationToken( String VerificationToken) {
+    public VerificationToken getVerificationToken(String VerificationToken) {
         return tokenRepository.findByToken(VerificationToken);
     }
 
     @Override
-    public void saveRegisteredUser( User user) {
+    public void saveRegisteredUser(UserDto user) {
         repository.addUser(user);
     }
 
     @Override
-    public void deleteUser( User user) {
-         VerificationToken verificationToken = tokenRepository.findByUser(user);
+    public void saveRegisteredUser(User user) {
+        repository.addUser(user);
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        VerificationToken verificationToken = tokenRepository.findByUser(user);
 
         if (verificationToken != null) {
             tokenRepository.delete(verificationToken);
         }
 
-         PasswordResetToken passwordToken = passwordTokenRepository.findByUser(user);
+        PasswordResetToken passwordToken = passwordTokenRepository.findByUser(user);
 
         if (passwordToken != null) {
             passwordTokenRepository.delete(passwordToken);
@@ -107,13 +108,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createVerificationTokenForUser( User user,  String token) {
-         VerificationToken myToken = new VerificationToken(token, user);
+    public void createVerificationTokenForUser(User user, String token) {
+        VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.add(myToken);
     }
 
     @Override
-    public VerificationToken generateNewVerificationToken( String existingVerificationToken) {
+    public VerificationToken generateNewVerificationToken(String existingVerificationToken) {
         VerificationToken vToken = tokenRepository.findByToken(existingVerificationToken);
         vToken.updateToken(UUID.randomUUID().toString());
         vToken = tokenRepository.add(vToken);
@@ -121,51 +122,51 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createPasswordResetTokenForUser( User user,  String token) {
-         PasswordResetToken myToken = new PasswordResetToken(token, user);
+    public void createPasswordResetTokenForUser(User user, String token) {
+        PasswordResetToken myToken = new PasswordResetToken(token, user);
         passwordTokenRepository.add(myToken);
     }
 
     @Override
-    public User findUserByEmail( String email) {
+    public User findUserByEmail(String email) {
         return repository.findByEmail(email);
     }
 
     @Override
-    public PasswordResetToken getPasswordResetToken( String token) {
+    public PasswordResetToken getPasswordResetToken(String token) {
         return passwordTokenRepository.findByToken(token);
     }
 
     @Override
-    public User getUserByPasswordResetToken( String token) {
+    public User getUserByPasswordResetToken(String token) {
         return passwordTokenRepository.findByToken(token).getUser();
     }
 
     @Override
-    public User getUserByID( long id) {
+    public User getUserByID(long id) {
         return repository.findById(id);
     }
 
     @Override
-    public void changeUserPassword( User user,  String password) {
+    public void changeUserPassword(UserDto user, String password) {
         user.setPassword(passwordEncoder.encode(password));
         repository.addUser(user);
     }
 
     @Override
-    public boolean checkIfValidOldPassword( User user,  String oldPassword) {
+    public boolean checkIfValidOldPassword(User user, String oldPassword) {
         return passwordEncoder.matches(oldPassword, user.getPassword());
     }
 
     @Override
     public String validateVerificationToken(String token) {
-         VerificationToken verificationToken = tokenRepository.findByToken(token);
+        VerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken == null) {
             return TOKEN_INVALID;
         }
 
-         User user = verificationToken.getUser();
-         Calendar cal = Calendar.getInstance();
+        User user = verificationToken.getUser();
+        Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             tokenRepository.delete(verificationToken);
             return TOKEN_EXPIRED;
@@ -193,7 +194,7 @@ public class UserServiceImpl implements UserService {
 //        return currentUser;
 //    }
 
-    private boolean emailExist( String email) {
+    private boolean emailExist(String email) {
         return repository.findByEmail(email) != null;
     }
 

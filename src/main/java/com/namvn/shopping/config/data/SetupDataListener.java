@@ -87,7 +87,6 @@ public class SetupDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
 
-
     Role createRoleIfNotFound(final String name, final List<Privilege> privileges) {
         Role role = roleService.findByName(name);
         if (role == null) {
@@ -108,21 +107,17 @@ public class SetupDataListener implements ApplicationListener<ContextRefreshedEv
         User user = userService.findUserByEmail(email);
         if (user == null) {
             user = new User();
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
             user.setPassword(passwordEncoder.encode(password));
             user.setEmail(email);
             user.setEnabled(true);
+            try {
+                user.setRoles(roles);
+                userService.saveRegisteredUser(user);
+                return user;
+            } catch (RuntimeException e) {
+                return user;
+            }
         }
-
-        try {
-            user.setRoles(roles);
-            userService.saveRegisteredUser(user);
-            return user;
-        } catch (RuntimeException e) {
-            return user;
-        }
-
-
+        return user;
     }
 }

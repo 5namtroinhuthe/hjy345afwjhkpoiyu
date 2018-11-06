@@ -23,7 +23,249 @@
     <!-- Core Style CSS -->
     <link rel="stylesheet" th:href="@{/static/css/core-style.css}">
     <link rel="stylesheet" th:href="@{/static/style.css}">
+    <style>
 
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        /* Style the close button */
+        .topright {
+            float: right;
+            cursor: pointer;
+            font-size: 28px;
+        }
+
+        .topright:hover {
+            color: red;
+        }
+
+        .login-popup-sec ul li input:focus, .login-popup-sec .login-popup-clsbtn:focus, {
+            outline: none;
+        }
+
+        .login-popup-sec {
+            font-family: 'calibri', sans-serif;
+            margin: 30px auto;
+            padding: 0;
+            width: 390px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .login-popup-sec .login-content {
+            background: #fff;
+            width: 100%;
+            float: left;
+            overflow: hidden;
+            box-sizing: border-box;
+            padding-bottom: 20px;
+            -webkit-box-shadow: 0px 5px 20px 0px rgba(103, 103, 103, 0.43);
+            -moz-box-shadow: 0px 5px 20px 0px rgba(103, 103, 103, 0.43);
+            box-shadow: 0px 5px 20px 0px rgba(103, 103, 103, 0.43);
+        }
+
+        .login-popup-sec h2 {
+            font-family: 'calibri', sans-serif;
+            font-size: 33px;
+            margin: 0px;
+            padding: 20px 0;
+            letter-spacing: 1px;
+            width: 100%;
+            background: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            color: #333333;
+            float: left;
+            width: 100%;
+            -webkit-box-shadow: 0 13px 24px 0 rgba(0, 0, 0, 0.19);
+            box-shadow: 0 13px 24px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .login-popup-sec h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            margin: 0px;
+            padding: 20px 0;
+        }
+
+        .login-popup-sec ul {
+            padding: 37px 50px 0 50px;
+            margin: 0px;
+            float: left;
+            width: 100%;
+            list-style: none;
+            box-sizing: border-box;
+        }
+
+        .login-popup-sec ul li {
+            margin: 0;
+            padding: 0px;
+            float: left;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .login-popup-sec ul li input {
+            height: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #222;
+            border: solid 1px #9c9c9c;
+            margin: 0px;
+            padding: 15px;
+            width: 100%;
+            float: left;
+            box-sizing: border-box;
+            -webkit-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.13);
+            box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.13);
+            margin-bottom: 25px;
+        }
+
+        .login-popup-sec ul li button.login-btn {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            border: 0px;
+            margin: 0px;
+            width: 100%;
+            background: #0054a6;
+            height: 50px;
+        }
+
+        .login-popup-sec .login-popup-clsbtn {
+            font-size: 14px;
+            line-height: 18px;
+            width: 28px;
+            height: 28px;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            background: #FFF;
+            position: absolute;
+            right: -14px;
+            top: -14px;
+            border: 0px;
+            -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.27);
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.27);
+            cursor: pointer;
+        }
+
+        .login-popup-sec .login-popup-clsbtn:hover {
+            color: #fff;
+            background: #0006fe;
+        }
+
+        .login-popup-sec ul li button.login-btn:hover {
+            background: #014689;
+        }
+
+        .login-popup-sec ul li .social-icon {
+            margin-bottom: 8px;
+        }
+
+        .popup-graybox {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 99999;
+            text-align: center;
+            align-items: center;
+            display: flex;
+            box-sizing: border-box;
+            overflow: auto;
+        }
+
+        @media only screen and (max-width: 480px) {
+            .login-popup-sec {
+                width: 90%;
+            }
+
+            .login-popup-sec ul {
+                padding: 37px 20px 0 20px;
+            }
+
+            .login-popup-sec h2 {
+                font-size: 24px;
+                padding: 15px 0;
+            }
+
+            .login-popup-sec ul li input {
+                font-size: 12px;
+                margin-bottom: 15px;
+                height: 45px;
+            }
+
+            .login-popup-sec h3 {
+                font-size: 14px;
+                padding: 15px 0;
+            }
+
+            .login-popup-sec ul li button.login-btn {
+                font-size: 12px;
+                letter-spacing: 0.5px;
+                height: 45px;
+            }
+
+            .login-popup-sec ul li .social-icon {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
 </head>
 
 <body>
@@ -212,7 +454,7 @@
     <!-- Single Product Thumb -->
     <div class="single_product_thumb clearfix">
         <!--<div class="product_thumbnail_slides owl-carousel">-->
-            <img th:src="${productObj.getImage()}" alt="">
+        <img th:src="${productObj.getImage()}" alt="">
         <!--</div>-->
     </div>
 
@@ -222,7 +464,9 @@
         <a href="cart.html">
             <h2 th:utext="${productObj.getName()}">One Shoulder Glitter Midi Dress</h2>
         </a>
-        <p class="product-price" th:utext="${productObj.getPriceNew()+' N'}"><span class="old-price" th:utext="${productObj.getPrices()+' N'}"></span> </p>
+        <p class="product-price" th:utext="${productObj.getPriceNew()+' N'}"><span class="old-price"
+                                                                                   th:utext="${productObj.getPrices()+' N'}"></span>
+        </p>
         <p class="product-desc" th:utext="${productObj.getDetail()}"></p>
 
         <!-- Form -->
@@ -246,7 +490,11 @@
             <div class="cart-fav-box d-flex align-items-center">
                 <!-- Cart class="btn essence-btn"-->
                 <!---->
-                <button type="button" name="addtocart" value="5" class="btn essence-btn"  data-toggle="modal" data-target="#login-modal">Thêm vào giỏ</button>
+                <!--data-toggle="modal" data-target="#login-modal"-->
+                <button type="button" name="addtocart" value="5" class="btn essence-btn" data-toggle="modal"
+                        data-target="#login-modal">Add to cart
+                </button>
+
                 <!-- Favourite -->
                 <div class="product-favourite ml-4">
                     <a href="#" class="favme fa fa-heart"></a>
@@ -255,6 +503,84 @@
         </form>
     </div>
 </section>
+
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header login_modal_header tab">
+                <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'sign-in')">Sign in</button>
+                <button class="tablinks" onclick="openCity(event, 'sign-up')">Sign up</button>
+            </div>
+            <div id="sign-in" class="modal-body login-modal  tabcontent">
+                <br/>
+                <div class="clearfix"></div>
+                <div class='social-icons-conatainer'>
+                    <form th:action="@{/j_spring_security_login}" method="post">
+                        <div class='modal-body-left'>
+                            <div class="form-group">
+                                <input type="text" id="email" placeholder="Enter your name" value=""
+                                       class="form-control login-field" name="email">
+                                <i class="fa fa-user login-field-icon"></i>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="password" id="password" placeholder="Password" value=""
+                                       class="form-control login-field" name="password">
+                                <i class="fa fa-lock login-field-icon"></i>
+                            </div>
+
+                            <button type="submit" class="btn btn-success modal-login-btn">Đăng nhập</button>
+                            <span class="login-link text-center">Quên mật khẩu</span>
+                        </div>
+                    </form>
+
+                    <div class='modal-body-right'>
+                        <div class="modal-social-icons">
+                            <a th:href="@{/connect/facebook}" class="btn btn-default facebook"> <i
+                                    class="fa fa-facebook modal-icons"></i> Facebook </a>
+
+                            <a th:href='@{/connect/google}' class="btn btn-default google"> <i
+                                    class="fa fa-google-plus modal-icons"></i> Google </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sign-up" class="login-popup-sec tabcontent">
+                <div class="login-content">
+                    <h2 data-edit="text">REGISTER</h2>
+                    <form th:action="@{/registration}" method="post">
+                        <ul>
+                            <li>
+                                <input type="email" placeholder="Your Email" name="email" data-edit="placeholder">
+                            </li>
+                            <li>
+                                <input type="password" placeholder="Your Password" name="password"
+                                       data-edit="placeholder">
+                            </li>
+                            <li>
+                                <input type="matchingPassword" name="matchingPassword"
+                                       placeholder="Your Repeat Password" data-edit="placeholder">
+                            </li>
+                            <li>
+                                <input type="hidden" name="url">
+                            </li>
+                            <li>
+                                <button class="login-btn" type="submit">Register</button>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<
 <!-- ##### Single Product Details Area End ##### -->
 
 <!-- ##### Footer Area Start ##### -->
@@ -339,11 +665,11 @@
                 </p>
             </div>
         </div>
-
     </div>
+
 </footer>
 <!-- ##### Footer Area End ##### -->
-<!-- Login --->
+<!--&lt;!&ndash; Login -&ndash;&gt;-->
 <script th:src="@{/static/modal_login/js/vendor/modernizr-2.6.2.min.js}"></script>
 <script th:src="@{/static/modal_login/js/vendor/jquery-1.10.2.min.js}"></script>
 <script th:src="@{/static/modal_login/js/vendor/bootstrap.min.js}"></script>
@@ -363,52 +689,4 @@
 </body>
 
 </html>
-
-<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header login_modal_header">
-
-            </div>
-            <div class="modal-body login-modal">
-                <br/>
-                <div class="clearfix"></div>
-                <div id='social-icons-conatainer'>
-                    <div class='modal-body-left'>
-                        <div class="form-group">
-                            <input type="text" id="username" placeholder="Enter your name" value="" class="form-control login-field">
-                            <i class="fa fa-user login-field-icon"></i>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="password" id="login-pass" placeholder="Password" value="" class="form-control login-field">
-                            <i class="fa fa-lock login-field-icon"></i>
-                        </div>
-
-                        <a href="#" class="btn btn-success modal-login-btn">Đăng nhập</a>
-                        <a href="#" class="login-link text-center">Quên mật khẩu</a>
-                    </div>
-
-                    <div class='modal-body-right'>
-                        <div class="modal-social-icons">
-                            <a href='#' class="btn btn-default facebook"> <i class="fa fa-facebook modal-icons"></i> Facebook </a>
-
-                            <a href='#' class="btn btn-default google"> <i class="fa fa-google-plus modal-icons"></i> Google </a>
-
-                        </div>
-                    </div>
-                    <div id='center-line'> OR </div>
-                </div>
-                <div class="clearfix"></div>
-
-                <div class="form-group modal-register-btn">
-                    <button class="btn btn-default">Đăng ký</button>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <div class="modal-footer login_modal_footer">
-            </div>
-        </div>
-    </div>
-</div>
 

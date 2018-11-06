@@ -48,7 +48,16 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public void addUser(User user)throws RuntimeException {
+    public void addUser(UserDto user)throws RuntimeException {
+        Session session = sessionFactory.getCurrentSession();
+        User acc=new User();
+        acc.setEmail(user.getEmail());
+        acc.setPassword(user.getPassword());
+        session.save(acc);
+    }
+
+    @Override
+    public void addUser(User user) {
         Session session = sessionFactory.getCurrentSession();
         session.save(user);
     }

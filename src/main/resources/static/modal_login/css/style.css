@@ -33,7 +33,7 @@ body{
 .twitter, .twitter:hover{ background-color: #00aced; border:2px solid #00aced;color: #fff;}
 .facebook, .facebook:hover{background-color: #3b5999; border:2px solid #3b5999;color:#fff;}
 .linkedin, .linkedin:hover{background-color: #007bb6; border: 2px solid #007bb6; color:#fff;}
-#social-icons-conatainer{position: relative;}
+.social-icons-conatainer{position: relative;}
 #center-line{position: absolute;  right: 265.7px;top: 80px;background:#ddd;  border: 4px solid #DDDDDD;border-radius: 20px;}
 .modal-login-btn{width:100%;height:40px; margin-bottom:10px;}
 #modal-launcher{margin: 30% 0 0 30%; }

@@ -15,8 +15,8 @@ public interface UserService {
 
     User getUser(String verificationToken);
 
-    void saveRegisteredUser(User user);
-
+    void saveRegisteredUser(UserDto user);
+void saveRegisteredUser(User user);
     void deleteUser(User user);
 
     void createVerificationTokenForUser(User user, String token);
@@ -35,7 +35,7 @@ public interface UserService {
 
     User getUserByID(long id);
 
-    void changeUserPassword(User user, String password);
+    void changeUserPassword(UserDto user, String password);
 
     boolean checkIfValidOldPassword(User user, String password);
 

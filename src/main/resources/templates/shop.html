@@ -19,11 +19,12 @@
                 $(".color1").attr("href", a1());
             });
         });
-      function  a1(){
+
+        function a1() {
             let color = new Predicate(colors, 'colorList');
             let list = color.handleClick('trang', 'trangClick');
             let href = new PreProcesssingUrl(list, sizes, manufacturers, materials, madeIns).calUrl();
-           return href;
+            return href;
         }
     </script>
     <!-- Core Style CSS -->
@@ -379,7 +380,7 @@
 
                     <div class="row">
                         <!-- Single Product -->
-                        <div class="col-12 col-sm-6 col-lg-4" th:each="pro:${products.getList()}" >
+                        <div class="col-12 col-sm-6 col-lg-4" th:each="pro:${products.getList()}">
                             <div class="single-product-wrapper">
                                 <!-- Product Image -->
                                 <div class="product-img">
@@ -402,9 +403,9 @@
                                 <!-- Product Description -->
                                 <div class="product-description">
                                     <span th:utext="${pro.getManufacturer()}"></span>
-                                    <a th:href="@{'/product/getId/'+${pro.getProductId()}}" alt="">
-                                        <h6 th:utext="${pro.getName()}" ></h6>
-                                    </a>
+
+                                    <h6 th:utext="${pro.getName()}"></h6>
+
                                     <p class="product-price" th:utext="${pro.getPriceNew()}+'N'"><span class="old-price"
                                                                                                        th:utext="${pro.getPrices()}+'N'"></span>
                                     </p>
@@ -413,7 +414,8 @@
                                     <div class="hover-content">
                                         <!-- Add to Cart -->
                                         <div class="add-to-cart-btn">
-                                            <a href="#" class="btn essence-btn">Thêm vào giỏ hàng</a>
+                                            <a th:href="@{'/product/getId/'+${pro.getProductId()}}"
+                                               class="btn essence-btn">Xem chi tiết</a>
                                         </div>
                                     </div>
                                 </div>

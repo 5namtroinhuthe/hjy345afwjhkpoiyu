@@ -25,15 +25,8 @@ public class User implements Serializable {
     @NotNull(message = "Email  cannot be empty")
     @Email(message = "Email Format is not valid")
     @Size(min = 3, max = 30, message = "Email can not be empty")
+    @Column(unique = true)
     private String email;
-
-    @NotNull(message = "First Name cannot be empty")
-    @Size(min = 3, max = 30, message = "First Name cannot be less than 3 characters")
-    private String firstName;
-
-    @NotNull(message = "Last Name cannot be empty")
-    @Size(min = 3, max = 30, message = "Last Name cannot be less than 3 characters")
-    private String lastName;
     private String password;
     @Transient
     private String passwordConfirm;
@@ -120,6 +113,14 @@ public class User implements Serializable {
         return verificationToken;
     }
 
+    public UserOrder getUserOrder() {
+        return userOrder;
+    }
+
+    public void setUserOrder(UserOrder userOrder) {
+        this.userOrder = userOrder;
+    }
+
     public void setVerificationToken(VerificationToken verificationToken) {
         this.verificationToken = verificationToken;
     }
@@ -145,21 +146,6 @@ public class User implements Serializable {
     }
 
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
 
     public String getProvider() {

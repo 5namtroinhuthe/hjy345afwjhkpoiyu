@@ -22,12 +22,12 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<A
         // if (auth != null) {
         // loginAttemptService.loginSucceeded(auth.getRemoteAddress());
         // }
-        final String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null) {
-            loginAttemptService.loginSucceeded(request.getRemoteAddr());
-        } else {
-            loginAttemptService.loginSucceeded(xfHeader.split(",")[0]);
-        }
+//        final String xfHeader = request.getHeader("X-Forwarded-For");
+//        if (xfHeader == null) {
+//            loginAttemptService.loginSucceeded(request.getRemoteAddr());
+//        } else {
+//            loginAttemptService.loginSucceeded(xfHeader.split(",")[0]);
+//        }
     }
 
 }

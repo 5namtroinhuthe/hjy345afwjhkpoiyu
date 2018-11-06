@@ -42,8 +42,6 @@ public class FacebookProvider {
         org.springframework.social.facebook.api.User user = facebook.userOperations().getUserProfile();
 
         userForm.setEmail(user.getEmail());
-        userForm.setFirstName(user.getFirstName());
-        userForm.setLastName(user.getLastName());
         userForm.setImage(user.getCover().getSource());
         userForm.setProvider(FACEBOOK);
     }

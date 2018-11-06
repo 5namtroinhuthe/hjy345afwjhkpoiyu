@@ -9,19 +9,10 @@ import javax.validation.constraints.Size;
 
 @PasswordMatches
 public class UserDto {
-    @NotNull
-    @Size(min = 1, message = "{Size.userDto.firstName}")
-    private String firstName;
-
-    @NotNull
-    @Size(min = 1, message = "{Size.userDto.lastName}")
-    private String lastName;
-
     @ValidPassword
     private String password;
 
-    @NotNull
-    @Size(min = 1)
+
     private String matchingPassword;
 
     @ValidEmail
@@ -29,6 +20,8 @@ public class UserDto {
     @Size(min = 1, message = "{Size.userDto.email}")
     private String email;
 
+
+    private String url;
    // private boolean isUsing2FA;
 
     public String getEmail() {
@@ -49,21 +42,6 @@ public class UserDto {
         this.role = role;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getPassword() {
         return password;
@@ -81,7 +59,21 @@ public class UserDto {
         this.matchingPassword = matchingPassword;
     }
 
-//    public boolean isUsing2FA() {
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public UserDto(String password, @NotNull @Size(min = 1, message = "{Size.userDto.email}") String email, @NotNull String url, Integer role) {
+        this.password = password;
+        this.email = email;
+        this.url = url;
+        this.role = role;
+    }
+    //    public boolean isUsing2FA() {
 //        return isUsing2FA;
 //    }
 //
@@ -92,7 +84,7 @@ public class UserDto {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("UserDto [firstName=").append(firstName).append(", lastName=").append(lastName).append(", password=").append(password).append(", matchingPassword=").append(matchingPassword).append(", email=").append(email).append(", isUsing2FA=")
+        builder.append("UserDto [email=").append(email).append(", password=").append(password).append(", matchingPassword=").append(matchingPassword).append(", email=").append(email).append(", isUsing2FA=")
 //                .append(isUsing2FA)
                 .append(", role=").append(role).append("]");
         return builder.toString();

@@ -7,7 +7,8 @@ import com.namvn.shopping.web.form.UserDto;
 
 public interface UserDao {
     //User addUser(UserDto accountDto);
-    void addUser(User user) throws RuntimeException;
+    void addUser(UserDto user) throws RuntimeException;
+    void addUser(User user);
     void delete(User user);
     User findByEmail(String email);
     User findById(Long id);
