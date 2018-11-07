@@ -220,17 +220,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                        UrlAddress.CART_GET_ID,
 //                        UrlAddress.CART_DELETE_CARTITEM_ID
 //                        ).hasAuthority()
-
+                .antMatchers("/user/updatePassword*","/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
 //                .authenticated()
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/j_spring_security_login")
                 .loginPage("/product/getId/4")
-                .defaultSuccessUrl("/index")
-                .failureUrl("/404")
+                .defaultSuccessUrl("/cart.html")
+                .failureUrl("/login-error")
                 .usernameParameter("email")//
                 .passwordParameter("password")
-//                .defaultSuccessUrl("/secure/user")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
 

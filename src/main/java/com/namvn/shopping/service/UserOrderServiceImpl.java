@@ -1,10 +1,14 @@
 package com.namvn.shopping.service;
 
 import com.namvn.shopping.persistence.entity.Cart;
+import com.namvn.shopping.persistence.entity.Product;
 import com.namvn.shopping.persistence.entity.User;
 import com.namvn.shopping.persistence.entity.UserOrder;
+import com.namvn.shopping.persistence.model.ProductInfo;
+import com.namvn.shopping.persistence.model.RevenueInfo;
 import com.namvn.shopping.persistence.model.UserOrderInfo;
 import com.namvn.shopping.persistence.repository.CartDao;
+import com.namvn.shopping.persistence.repository.ProductDao;
 import com.namvn.shopping.persistence.repository.UserOrderDao;
 import com.namvn.shopping.util.constant.MailConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +18,17 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
+@Transactional
 public class UserOrderServiceImpl implements UserOrderService {
     @Autowired
     private CartDao mCartDao;
-
+    @Autowired
+    private ProductDao mProductDao;
     @Autowired
     private UserOrderDao mUserOrderDao;
     @Autowired
@@ -68,5 +77,17 @@ public class UserOrderServiceImpl implements UserOrderService {
 
 
         return "Email Sent!";
+    }
+
+
+    @Override
+    public RevenueInfo getSugesst(String id) {
+
+        long count = mUserOrderDao.calRevenue();
+
+        Product product = mProductDao.getProductById1(id);
+        float revenue = product.getPriceNew() - product.getPriceInput();
+     return  new RevenueInfo(count,revenue);
+
     }
 }

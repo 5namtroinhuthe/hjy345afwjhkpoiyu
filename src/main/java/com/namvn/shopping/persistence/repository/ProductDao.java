@@ -22,7 +22,7 @@ public interface ProductDao {
     void addProduct(Product product);
 
     void editProduct(Product product);
-
+    Product getProductById1(String productId);
     CriteriaQuery queryPredicatesBetweenPriceOrNomal(CriteriaSkeleton criteriaSkeleton,
                                                      ProductParam productParam,
                                                      int parameter,

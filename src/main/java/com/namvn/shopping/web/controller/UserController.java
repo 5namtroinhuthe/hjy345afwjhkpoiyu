@@ -1,5 +1,6 @@
 package com.namvn.shopping.web.controller;
 
+import com.namvn.shopping.persistence.model.ProductInfo;
 import com.namvn.shopping.service.UserService;
 import com.namvn.shopping.social.autologin.Autologin;
 import com.namvn.shopping.persistence.entity.User;
@@ -65,23 +66,19 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String registerUser(ModelAndView model, @Valid UserDto userBean, BindingResult bindingResult) {
+    public String registerUser( @Valid UserDto userBean, BindingResult bindingResult) {
 //	if (bindingResult.hasErrors()) {
 //	    return "registration";
 //	}
 //	userBean.setProvider("REGISTRATION");
         // Save the details in DB
-        if (userService.findUserByEmail(userBean.getEmail()) == null) {
-            if (StringUtils.isEmpty(userBean.getPassword())) {
+            if (userBean.getPassword().length()>0) {
                 userBean.setPassword(bCryptPasswordEncoder.encode(userBean.getPassword()));
-                userService.saveRegisteredUser(userBean);
-                if (userBean.getUrl().startsWith(UrlAddress.PRODUCT_GET_ID))
+                userService.registerNewUserAccount(userBean);
+                if (userBean.getUrl().startsWith("/product/getId/"))
                     return userBean.getUrl();
             }
-        } else {
-            model.addObject("messageRegister", userBean.getEmail() + " is exist. You's regiter by another email");
-            return "register";
-        }
+
         return null;
     }
 
@@ -91,7 +88,7 @@ public class UserController {
     @RequestMapping("/login-error")
     public String loginError(Model model) {
 	model.addAttribute("loginError", true);
-	return "register";
+	return "single-product-details";
     }
 
 }

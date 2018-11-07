@@ -24,6 +24,7 @@ import static com.namvn.shopping.util.constant.CartConstant.CART_ID;
 import static com.namvn.shopping.util.constant.ProductContants.NAME;
 import static com.namvn.shopping.util.constant.ProductContants.PRODUCT_ID;
 import static com.namvn.shopping.util.constant.UserOrderConstant.*;
+
 @Repository
 @Transactional
 public class UserOrderImpl implements UserOrderDao {
@@ -91,6 +92,19 @@ public class UserOrderImpl implements UserOrderDao {
         session.flush();
         session.close();
         return new UserOrderInfo(userOrderInfo.getOrderId(), userOrderInfo.getStatus(), userOrderInfo.getNameUser(), userOrderInfo.getEmail(), query1.getResultList());
+    }
+
+    @Override
+    public long calRevenue() {
+        Session session = sessionFactory.openSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        //USER ORDER
+        Root<UserOrder> userDaoRoot = criteriaQuery.from(UserOrder.class);
+        criteriaQuery.select(builder.count(userDaoRoot.get("user")));
+        Query<Long> query = session.createQuery(criteriaQuery);
+        long count = query.getSingleResult();
+        return count;
     }
 
     @Override

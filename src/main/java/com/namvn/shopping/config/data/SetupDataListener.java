@@ -54,16 +54,21 @@ public class SetupDataListener implements ApplicationListener<ContextRefreshedEv
         final Privilege updatePrivilege = createPrivilegeIfNotFound("UPDATE_PRIVILEGE");
         final Privilege deletePrivilege = createPrivilegeIfNotFound("DELETE_PRIVILEGE");
         final Privilege passwordPrivilege = createPrivilegeIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
-        if (readPrivilege != null && writePrivilege != null && updatePrivilege != null && deletePrivilege != null && passwordPrivilege != null) {
-            final List<Privilege> adminPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, writePrivilege, updatePrivilege, deletePrivilege, passwordPrivilege));
-            final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-            if (adminPrivileges != null)
-                createUserIfNotFound("hahehiho95@gmail.com", "Nam", "Nguyen", "10101995", new ArrayList<Role>(Arrays.asList(adminRole)));
-        }
-        if (readPrivilege != null && passwordPrivilege != null) {
-            final List<Privilege> userPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, passwordPrivilege));
-            createRoleIfNotFound("ROLE_USER", userPrivileges);
-        } // == create initial roles
+        final List<Privilege> adminPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, writePrivilege, updatePrivilege, deletePrivilege, passwordPrivilege));
+        final List<Privilege> userPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, passwordPrivilege));
+        createRoleIfNotFound("ROLE_USER", userPrivileges);
+        final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
+        createUserIfNotFound("hahehiho95@gmail.com",  "10101995", new ArrayList<Role>(Arrays.asList(adminRole)));
+//        if (readPrivilege != null && writePrivilege != null && updatePrivilege != null && deletePrivilege != null && passwordPrivilege != null) {
+//
+//
+//            if (adminPrivileges != null)
+//
+//        }
+//        if (readPrivilege != null && passwordPrivilege != null) {
+//
+//
+//        } // == create initial roles
         // final List<Privilege> managerPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, updatePrivilege,passwordPrivilege));
 
 
@@ -103,7 +108,7 @@ public class SetupDataListener implements ApplicationListener<ContextRefreshedEv
 
     }
 
-    User createUserIfNotFound(final String email, final String firstName, final String lastName, final String password, final Collection<Role> roles) {
+    User createUserIfNotFound(final String email, final String password, final Collection<Role> roles) {
         User user = userService.findUserByEmail(email);
         if (user == null) {
             user = new User();

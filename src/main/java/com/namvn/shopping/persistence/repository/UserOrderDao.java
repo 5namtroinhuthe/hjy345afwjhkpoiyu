@@ -17,6 +17,7 @@ public interface UserOrderDao {
     CriteriaQuery<UserOrder> queryOrderByStatus(Session session);
 
     UserOrderInfo getOrderById(String orderId, String status);
+long calRevenue();
 
     PagingResult<UserOrder> getListOrder(int status);
 

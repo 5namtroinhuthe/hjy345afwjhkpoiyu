@@ -10,4 +10,5 @@ public interface CartDao {
     Cart validate(Long cartId) throws IOException;
 
     void update(Cart cart);
+    void save(Cart cart);
 }

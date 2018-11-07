@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
     <meta charset="UTF-8">
@@ -489,12 +489,12 @@
             <!-- Cart & Favourite Box -->
             <div class="cart-fav-box d-flex align-items-center">
                 <!-- Cart class="btn essence-btn"-->
-                <!---->
+                <!--sec:authorize="hasRole('ROLE_USER')"-->
                 <!--data-toggle="modal" data-target="#login-modal"-->
-                <button type="button" name="addtocart" value="5" class="btn essence-btn" data-toggle="modal"
+
+                <button  type="button" name="addtocart" value="5" class="btn essence-btn" data-toggle="modal"
                         data-target="#login-modal">Add to cart
                 </button>
-
                 <!-- Favourite -->
                 <div class="product-favourite ml-4">
                     <a href="#" class="favme fa fa-heart"></a>
@@ -528,7 +528,7 @@
                                        class="form-control login-field" name="password">
                                 <i class="fa fa-lock login-field-icon"></i>
                             </div>
-
+                            <!--<p th:if="${loginError}" class="alert alert-danger">Wrong email or password combination</p>-->
                             <button type="submit" class="btn btn-success modal-login-btn">Đăng nhập</button>
                             <span class="login-link text-center">Quên mật khẩu</span>
                         </div>
@@ -548,7 +548,7 @@
 
             <div id="sign-up" class="login-popup-sec tabcontent">
                 <div class="login-content">
-                    <h2 data-edit="text">REGISTER</h2>
+                    <h2 data-edit="text">Đăng ký</h2>
                     <form th:action="@{/registration}" method="post">
                         <ul>
                             <li>
@@ -559,11 +559,11 @@
                                        data-edit="placeholder">
                             </li>
                             <li>
-                                <input type="matchingPassword" name="matchingPassword"
+                                <input type="password" name="matchingPassword"
                                        placeholder="Your Repeat Password" data-edit="placeholder">
                             </li>
                             <li>
-                                <input type="hidden" name="url">
+                                <input type="hidden" name="url" th:value="'/product/getId/'+${productObj.getProductId()}">
                             </li>
                             <li>
                                 <button class="login-btn" type="submit">Register</button>

@@ -47,4 +47,11 @@ public class CartDaoImpl implements CartDao {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(cart);
     }
+
+    @Override
+    public void save(Cart cart) {
+        Session session = sessionFactory.getCurrentSession();
+       session.save(cart);
+
+    }
 }

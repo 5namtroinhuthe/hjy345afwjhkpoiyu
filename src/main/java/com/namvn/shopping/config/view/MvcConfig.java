@@ -35,6 +35,14 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler(
 //                "/webjars/**",
                 "/static/css/**",
+
+                "/static/fashe-colorlib/css/**",
+                "/static/fashe-colorlib/fonts/**",
+                "/static/fashe-colorlib/images/**",
+                "/static/fashe-colorlib/includes/**",
+                "/static/fashe-colorlib/js/**",
+                "/static/fashe-colorlib/vendor/**",
+
                 "/static/fonts/**",
                 "/static/img/bg-img/**",
                 "/static/img/core-img/**",
@@ -65,6 +73,14 @@ public class MvcConfig implements WebMvcConfigurer {
                 .addResourceLocations(
 //                        "classpath:/META-INF/resources/webjars/",
                         "classpath:/static/css/",
+
+                        "classpath:/static/fashe-colorlib/css/",
+                        "classpath:/static/fashe-colorlib/fonts/",
+                        "classpath:/static/fashe-colorlib/images/",
+                        "classpath:/static/fashe-colorlib/includes/",
+                        "classpath:/static/fashe-colorlib/js/",
+                        "classpath:/static/fashe-colorlib/vendor/",
+
                         "classpath:/static/fonts/",
                         "classpath:/static/img/bg-img/",
                         "classpath:/static/img/core-img/",

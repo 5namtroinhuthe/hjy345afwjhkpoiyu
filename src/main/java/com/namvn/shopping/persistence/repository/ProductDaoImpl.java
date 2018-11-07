@@ -249,7 +249,16 @@ public class ProductDaoImpl implements ProductDao {
         return new ProductInfo(product.getName(),product.getImage(),product.getDetail(),product.getPriceNew(),product.getPrices(),product.getManufacturer(),product.getSize(),product.getColor(),product.getProductId());
 
     }
+    @Override
+    public Product getProductById1(String productId) {
+        // Reading the records from the table
+        Session session = sessionFactory.getCurrentSession();
+        // select * from Product where isbn=i
+        Product product = session.get(Product.class, productId);
 
+       return product;
+
+    }
     @Override
     public void deleteProduct(String productId) {
         Session session = sessionFactory.getCurrentSession();

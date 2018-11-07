@@ -25,6 +25,13 @@ public class Cart {
     public Cart() {
     }
 
+    public Cart(double totalPrice, Date date, int status, User user) {
+        this.totalPrice = totalPrice;
+        this.date = date;
+        this.status = status;
+        this.user = user;
+    }
+
     public Long getCartId() {
         return cartId;
     }

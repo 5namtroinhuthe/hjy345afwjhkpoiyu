@@ -28,6 +28,7 @@ public class Product {
     private String province;
     @NotNull
     private String image;
+    private float priceInput;
     private float prices;
     private float priceNew;
     @NotNull
@@ -51,6 +52,14 @@ public class Product {
         this.name = name;
         this.prices = prices;
         this.priceNew = priceNew;
+    }
+
+    public float getPriceInput() {
+        return priceInput;
+    }
+
+    public void setPriceInput(float priceInput) {
+        this.priceInput = priceInput;
     }
 
     public String getProvince() {
