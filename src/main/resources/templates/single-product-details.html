@@ -515,7 +515,7 @@
                 <br/>
                 <div class="clearfix"></div>
                 <div class='social-icons-conatainer'>
-                    <form th:action="@{/j_spring_security_login}" method="post">
+                    <form th:action="'/product/getId/'+${productObj.getProductId()}" method="post">
                         <div class='modal-body-left'>
                             <div class="form-group">
                                 <input type="text" id="email" placeholder="Enter your name" value=""
