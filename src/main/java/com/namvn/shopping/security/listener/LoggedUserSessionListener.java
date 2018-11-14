@@ -1,5 +1,6 @@
-package com.namvn.shopping.security;
+package com.namvn.shopping.security.listener;
 
+import com.namvn.shopping.security.ActiveUserStore;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSessionBindingEvent;

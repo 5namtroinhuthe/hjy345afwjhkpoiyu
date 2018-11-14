@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
     <meta charset="UTF-8">
@@ -492,9 +493,12 @@
                 <!--sec:authorize="hasRole('ROLE_USER')"-->
                 <!--data-toggle="modal" data-target="#login-modal"-->
 
-                <button  type="button" name="addtocart" value="5" class="btn essence-btn" data-toggle="modal"
+                <button type="button" name="addtocart" value="5" class="btn essence-btn"
+                        sec:authorize="!hasRole('ROLE_USER')"
+                        data-toggle="modal"
                         data-target="#login-modal">Add to cart
                 </button>
+
                 <!-- Favourite -->
                 <div class="product-favourite ml-4">
                     <a href="#" class="favme fa fa-heart"></a>
@@ -528,6 +532,11 @@
                                        class="form-control login-field" name="password">
                                 <i class="fa fa-lock login-field-icon"></i>
                             </div>
+                            <input
+                                    type="hidden"
+                                    th:name="${_csrf.parameterName}"
+                                    th:value="${_csrf.token}" />
+                            <!--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />-->
                             <!--<p th:if="${loginError}" class="alert alert-danger">Wrong email or password combination</p>-->
                             <button type="submit" class="btn btn-success modal-login-btn">Đăng nhập</button>
                             <span class="login-link text-center">Quên mật khẩu</span>
@@ -563,7 +572,8 @@
                                        placeholder="Your Repeat Password" data-edit="placeholder">
                             </li>
                             <li>
-                                <input type="hidden" name="url" th:value="'/product/getId/'+${productObj.getProductId()}">
+                                <input type="hidden" name="url"
+                                       th:value="'/product/getId/'+${productObj.getProductId()}">
                             </li>
                             <li>
                                 <button class="login-btn" type="submit">Register</button>
@@ -573,9 +583,18 @@
                 </div>
             </div>
 
+            <div id="product-cart" class="login-popup-sec tabcontent" role="dialog">
+                <img th:src="${productObj.getImage()}">
+                <p th:utext="${productObj.getName()}"></p>
+                <p th:utext="${productObj.getPriceNew()}"></p>
+                <p th:utext="${productObj.getPrices()}"></p>
+                <p th:utext="'Giỏ hàng của bạn hiện có' +${productObj.getProductId()}"></p>
+                <p>Tổng giá trị tất cả các sản phẩm trong giỏ</p>
+                <p th:utext=""></p>
+                <button><a th:href="@{/cart/detail}">Xem chi tiết giỏ hàng</a></button>
+                <button><a th:href="@{/bill/add}">Mua ngay</a></button>
+            </div>
         </div>
-
-
     </div>
 </div>
 
@@ -689,4 +708,3 @@
 </body>
 
 </html>
-

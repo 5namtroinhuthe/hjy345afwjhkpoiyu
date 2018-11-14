@@ -1,5 +1,6 @@
-package com.namvn.shopping.security;
+package com.namvn.shopping.security.listener;
 
+import com.namvn.shopping.security.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;

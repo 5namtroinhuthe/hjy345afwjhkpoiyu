@@ -1,4 +1,4 @@
-package com.namvn.shopping.security;
+package com.namvn.shopping.security.handle;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;

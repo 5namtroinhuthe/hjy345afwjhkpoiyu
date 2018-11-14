@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * To authenticate account.Order 1
  */
-public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
+public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
     @Autowired
     private UserService userRepository;
     @Autowired
@@ -28,14 +28,14 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
             throw new BadCredentialsException("Invalid username or password");
         }
         // Database Password already encrypted:
-        String password = user.getPassword();
-        boolean passwordsMatch = passwordEncoder.matches(auth.getCredentials().toString(), password);
-        if (!passwordsMatch) {
-            throw new BadCredentialsException("Invalid username or password");
-        }
-
-        else {
-            final Authentication result = super.authenticate(auth);
+//        String password = user.getPassword();
+//        boolean passwordsMatch = passwordEncoder.matches(auth.getCredentials().toString(), password);
+//        if (!passwordsMatch) {
+//            throw new BadCredentialsException("Invalid username or password");
+//        }
+//
+       else {
+            Authentication result = super.authenticate(auth);
             return new UsernamePasswordAuthenticationToken(user, result.getCredentials(), result.getAuthorities());
 
         }

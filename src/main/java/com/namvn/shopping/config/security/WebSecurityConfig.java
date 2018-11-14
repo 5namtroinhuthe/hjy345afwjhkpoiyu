@@ -1,9 +1,11 @@
 package com.namvn.shopping.config.security;
 
-import com.namvn.shopping.persistence.model.ProductInfo;
-import com.namvn.shopping.security.CustomAuthenticationProvider;
+import com.namvn.shopping.filter.JWTAuthenticationFilter;
+import com.namvn.shopping.security.CustomDaoAuthenticationProvider;
 import com.namvn.shopping.security.CustomRememberMeServices;
 import com.namvn.shopping.social.google.GoogleUserInfoTokenServices;
+import com.namvn.shopping.web.error.CustomAccessDeniedHandler;
+import com.namvn.shopping.web.error.RestAuthenticationEntryPoint;
 import com.namvn.shopping.web.url.UrlAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,11 +34,10 @@ import org.springframework.security.oauth2.client.resource.UserRedirectRequiredE
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 
@@ -171,11 +172,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // userInfoTokenServices.setAuthoritiesExtractor(authoritiesExtractor);
         return userInfoTokenServices;
     }
+
+    @Bean
+    public RestAuthenticationEntryPoint restServicesEntryPoint() {
+        return new RestAuthenticationEntryPoint();
+    }
+
+    @Bean
+    public CustomAccessDeniedHandler customAccessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/static/css/**",
@@ -207,6 +220,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/static/scss/**",
                 "/templates/**");
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().
@@ -214,40 +228,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/css/**",
                         "/connect/**",
                         UrlAddress.PRODUCT_GET,
-                        UrlAddress.PRODUCT_GET_ID).permitAll()
-                .antMatchers("/secure/**").anonymous()
-//                .antMatchers(UrlAddress.CART_ADD_PRODUCT_ID,
-//                        UrlAddress.CART_GET_ID,
-//                        UrlAddress.CART_DELETE_CARTITEM_ID
-//                        ).hasAuthority()
-                .antMatchers("/user/updatePassword*","/user/savePassword*","/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
-//                .authenticated()
+                        UrlAddress.PRODUCT_GET_ID)
+                .permitAll();
+        http.antMatcher("/rest/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint())
+                .and()
+                .sessionManagement()
+                .invalidSessionUrl("/invalidSession.html")
+                .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
+                .sessionFixation().none().and().authorizeRequests()
+//                .antMatchers("/secure/**").anonymous()
+                .antMatchers(UrlAddress.CART_ADD_PRODUCT_ID,
+                        UrlAddress.CART_GET_ID,
+                        UrlAddress.CART_DELETE_CARTITEM_ID)
+                .hasRole("ROLE_USER")
+                .antMatchers("/user/updatePassword*", "/user/savePassword*", "/updatePassword*")
+                .hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
+
                 .and()
                 .formLogin()
-//                .loginProcessingUrl("/j_spring_security_login")
                 .loginPage(UrlAddress.PRODUCT_GET_ID)
-//                .loginPage("/product/getId/4")
 //                .defaultSuccessUrl("/cart.html")
 //                .failureUrl("/login-error")
                 .usernameParameter("email")//
                 .passwordParameter("password")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
-
-
                 .permitAll()
+
                 .and()
-//                .addFilterAfter(
-//                        oauth2ClientContextFilter,
-//                        ExceptionTranslationFilter.class)
-//                .addFilterBefore(
-//                        oauth2ClientAuthenticationProcessingFilter(),
-//                        FilterSecurityInterceptor.class)
-                .sessionManagement()
-                .invalidSessionUrl("/invalidSession.html")
-                .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
-                .sessionFixation().none()
+                .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler())
                 .and()
+
 
                 .logout()
                 .logoutSuccessHandler(logoutSuccessHandler)
@@ -255,7 +267,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/logout.html?logSucc=true")
                 .deleteCookies("JSESSIONID")
                 .permitAll()
+
                 .and()
+
                 .rememberMe().rememberMeServices(rememberMeServices()).key("theKey");
     }
 
@@ -280,7 +294,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        final CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
+        final CustomDaoAuthenticationProvider authProvider = new CustomDaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(bCryptPasswordEncoder());
         return authProvider;

@@ -21,7 +21,7 @@ public class UserDto {
     private String email;
 
 
-    private String url;
+
    // private boolean isUsing2FA;
 
     public String getEmail() {
@@ -59,27 +59,7 @@ public class UserDto {
         this.matchingPassword = matchingPassword;
     }
 
-    public String getUrl() {
-        return url;
-    }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public UserDto(String password, @NotNull @Size(min = 1, message = "{Size.userDto.email}") String email, @NotNull String url, Integer role) {
-        this.password = password;
-        this.email = email;
-        this.url = url;
-        this.role = role;
-    }
-    //    public boolean isUsing2FA() {
-//        return isUsing2FA;
-//    }
-//
-//    public void setUsing2FA(boolean isUsing2FA) {
-//        this.isUsing2FA = isUsing2FA;
-//    }
 
     @Override
     public String toString() {

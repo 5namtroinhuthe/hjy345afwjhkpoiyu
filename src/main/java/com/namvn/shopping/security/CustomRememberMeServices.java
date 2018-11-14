@@ -53,17 +53,6 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
         return auth;
     }
 
-    @Override
-    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        super.logout(request, response, authentication);
-
-        if (authentication != null) {
-            String username = ((User) authentication.getPrincipal()).getEmail();
-            tokenRepository.removeUserTokens(username);
-        }
-    }
-
-
     private void addCookie(PersistentRememberMeToken token, HttpServletRequest request, HttpServletResponse response) {
         setCookie(new String[]{token.getSeries(), token.getTokenValue()}, getTokenValiditySeconds(), request,
                 response);

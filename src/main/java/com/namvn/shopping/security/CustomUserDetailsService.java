@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service("userDetailsService")
-@Transactional
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -39,11 +38,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     }
 
-    private final Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
+    private  Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
         return getGrantedAuthorities(getPrivileges(roles));
     }
 
-    private final List<GrantedAuthority> getGrantedAuthorities(final List<String> privileges) {
+    private  List<GrantedAuthority> getGrantedAuthorities(final List<String> privileges) {
         final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for (final String privilege : privileges) {
             authorities.add(new SimpleGrantedAuthority(privilege));
@@ -51,7 +50,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return authorities;
     }
 
-    private final List<String> getPrivileges(final Collection<Role> roles) {
+    private  List<String> getPrivileges(final Collection<Role> roles) {
         final List<String> privileges = new ArrayList<String>();
         final List<Privilege> collection = new ArrayList<Privilege>();
         for (final Role role : roles) {
