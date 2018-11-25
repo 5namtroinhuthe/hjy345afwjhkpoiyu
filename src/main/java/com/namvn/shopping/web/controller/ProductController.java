@@ -2,39 +2,34 @@ package com.namvn.shopping.web.controller;
 
 import com.namvn.shopping.pagination.PagingResult;
 import com.namvn.shopping.persistence.entity.Product;
-import com.namvn.shopping.persistence.model.ProductInfo;
-import com.namvn.shopping.persistence.model.ProductParam;
+import com.namvn.shopping.persistence.model.ProductInfoUser;
+import com.namvn.shopping.persistence.model.ProductManager;
+import com.namvn.shopping.persistence.model.ProductRequestParam;
 import com.namvn.shopping.service.ProductService;
 import com.namvn.shopping.util.IO;
 import com.namvn.shopping.web.url.UrlAddress;
-import jdk.nashorn.internal.ir.RuntimeNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class ProductController {
+    public static final String PRODUCT_GET = "/product/get";
+    public static final String PRODUCT_ADD = "/product/add";
+    public static final String PRODUCT_EDIT = "product/edit";
+    public static final String PRODUCT_DELETE = "product/delete/{productId}";
+    public static final String PRODUCT_GET_ID = "/product/getId/{productId}";
+    public static final String MANAGER_ALMOST_OVER_PRODUCT = "/admin/product/get/almost";
     @Autowired
     private ProductService productService;
 
@@ -45,7 +40,7 @@ public class ProductController {
 //        return multipartResolver;
 //    }
 
-    @RequestMapping(value = UrlAddress.PRODUCT_GET, method = RequestMethod.GET)
+    @GetMapping(value = PRODUCT_GET)
     public ModelAndView getAllProducts(@RequestParam int page,
                                        @RequestParam(value = "sortType", required = false) String sortType,
                                        @RequestParam(value = "color", required = false) String color,
@@ -56,7 +51,7 @@ public class ProductController {
                                        @RequestParam(value = "minPrice", required = false) String minPrice,
                                        @RequestParam(value = "maxPrice", required = false) String maxPrice) {
         IO io = new IO();
-        ProductParam productParam = new ProductParam(sortType,
+        ProductRequestParam productParam = new ProductRequestParam(sortType,
                 (minPrice != null) ? (Float.valueOf(minPrice)) : 0,
                 (maxPrice != null) ? (Float.valueOf(maxPrice)) : 0,
                 io.cutWhiteSpaces(color),
@@ -64,18 +59,25 @@ public class ProductController {
                 io.cutWhiteSpaces(manufacturer),
                 io.cutWhiteSpaces(material),
                 io.cutWhiteSpaces(madeIn));
-        PagingResult<ProductInfo> products = productService.getQueryByDetail(page, 8, productParam);
+        PagingResult<ProductInfoUser> products = productService.getQueryByDetail(page, 8, productParam);
         return new
                 ModelAndView("shop", "products", products);
     }
 
-    @RequestMapping(UrlAddress.PRODUCT_GET_ID)
+    @GetMapping(value = MANAGER_ALMOST_OVER_PRODUCT)
+    public String getAlmostOverProduct(Model model, @RequestParam int page, @RequestParam int quantity, @RequestParam String sortType, @RequestParam String catergory) {
+        PagingResult<ProductManager> pagingResult = productService.getQueryAlmostOverProduct(page, 8, quantity, sortType, catergory);
+        model.addAttribute("almostOverProducts", pagingResult);
+        return null;
+    }
+
+    @GetMapping(PRODUCT_GET_ID)
     public ModelAndView getProductById(@PathVariable(value = "productId") String productId) {
-        ProductInfo product = productService.getProductById(productId);
+        ProductInfoUser product = productService.getProductById(productId);
         return new ModelAndView("single-product-details", "productObj", product);
     }
 
-    @RequestMapping(value = UrlAddress.PRODUCT_ADD, method = RequestMethod.POST)
+    @PostMapping(value = PRODUCT_ADD)
     public String addProduct(@Valid @ModelAttribute(value = "productFormObj") Product product, BindingResult result) {
         // Binding Result is used if the form that has any error then it will
         // redirect to the same page without performing any functions
@@ -97,16 +99,15 @@ public class ProductController {
         return "redirect:/getAllProducts";
     }
 
-    @RequestMapping(value = UrlAddress.PRODUCT_EDIT, method = RequestMethod.POST)
+    @PostMapping(value = PRODUCT_EDIT)
     public String editProduct(@ModelAttribute(value = "editProductObj") Product product) {
         productService.editProduct(product);
         return "redirect:/getAllProducts";
     }
 
-    @RequestMapping(UrlAddress.PRODUCT_DELETE)
+    @DeleteMapping(PRODUCT_DELETE)
     public String deleteProduct(@PathVariable(value = "productId") String productId) {
         productService.deleteProduct(productId);
-        // http://localhost:8080/shoppingCart/getAllProducts
         return "redirect:/getAllProducts";
     }
 

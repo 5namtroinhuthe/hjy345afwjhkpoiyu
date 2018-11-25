@@ -4,8 +4,10 @@ import com.namvn.shopping.pagination.PagingResult;
 import com.namvn.shopping.persistence.entity.UserOrder;
 import com.namvn.shopping.persistence.model.UserOrderInfo;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import javax.persistence.criteria.CriteriaQuery;
+import java.util.HashMap;
 
 public interface UserOrderDao {
     void addOrder(UserOrder customerOrder);
@@ -17,7 +19,17 @@ public interface UserOrderDao {
     CriteriaQuery<UserOrder> queryOrderByStatus(Session session);
 
     UserOrderInfo getOrderById(String orderId, String status);
-long calRevenue();
+
+
+    long countProductInOder(String productId);
+
+    Query<UserOrderInfo> queryOrderNotSend(Session session, String status, Long catergory);
+
+     PagingResult<UserOrderInfo> getListOrderNotSend(int page, int limit, String status, Long catergory);
+
+    HashMap caculateRevenueProducts(HashMap hashMap);
+
+    HashMap caculateRevenueProduct(String productId);
 
     PagingResult<UserOrder> getListOrder(int status);
 

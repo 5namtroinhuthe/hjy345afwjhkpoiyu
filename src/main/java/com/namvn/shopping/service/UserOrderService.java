@@ -1,11 +1,11 @@
 package com.namvn.shopping.service;
 
-import com.namvn.shopping.persistence.model.RevenueInfo;
+import com.namvn.shopping.persistence.model.SugesstProductImport;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface UserOrderService {
     void addUserOrder(Long cartId);
      String sendHtmlEmail(String orderId,String status) ;
-     RevenueInfo getSugesst(String id);
+    ArrayList<SugesstProductImport> getSugesst(int page, int limit, int quantity, String sortType, Long catergory);
 }

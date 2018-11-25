@@ -1,10 +1,11 @@
 package com.namvn.shopping.service;
 
 import com.namvn.shopping.pagination.PagingResult;
+import com.namvn.shopping.persistence.model.ProductManager;
 import com.namvn.shopping.persistence.repository.ProductDao;
 import com.namvn.shopping.persistence.entity.Product;
-import com.namvn.shopping.persistence.model.ProductInfo;
-import com.namvn.shopping.persistence.model.ProductParam;
+import com.namvn.shopping.persistence.model.ProductInfoUser;
+import com.namvn.shopping.persistence.model.ProductRequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,13 +24,18 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao mProductDao;
 
     @Override
-    public PagingResult<ProductInfo> getQueryByDetail(int page, int limit, ProductParam productParam) {
+    public PagingResult<ProductInfoUser> getQueryByDetail(int page, int limit, ProductRequestParam productParam) {
         return mProductDao.getQueryByDetail(page, limit, productParam);
     }
 
     @Override
-    public ProductInfo getProductById(String id) {
-        return mProductDao.getProductById(id);
+    public PagingResult<ProductManager> getQueryAlmostOverProduct(int page, int limit, int quantity, String sortType, String catergory) {
+        return mProductDao.getListAlmostOverProduct(page, limit, quantity,sortType,catergory);
+    }
+
+    @Override
+    public ProductInfoUser getProductById(String id) {
+        return (ProductInfoUser) mProductDao.getProductById(id);
     }
 
     @Override

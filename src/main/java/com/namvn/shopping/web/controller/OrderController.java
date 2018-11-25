@@ -1,14 +1,11 @@
 package com.namvn.shopping.web.controller;
 
-import com.namvn.shopping.persistence.model.RevenueInfo;
 import com.namvn.shopping.service.UserOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 import static com.namvn.shopping.web.url.UrlAddress.ORDER_CART_ID;
 

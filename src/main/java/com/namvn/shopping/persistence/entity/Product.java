@@ -16,7 +16,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String productId;
     @NotNull
-    private String name;
+    private String productName;
     @NotNull
     private String detail;
     private String color;
@@ -28,9 +28,13 @@ public class Product {
     private String province;
     @NotNull
     private String image;
+    @NotNull
     private float priceInput;
+    @NotNull
     private float prices;
     private float priceNew;
+    @NotNull
+    private int quantity;
     @NotNull
     private Date date;
     private int status;
@@ -49,7 +53,7 @@ public class Product {
 
     public Product(String productId, String name, float prices, float priceNew) {
         this.productId = productId;
-        this.name = name;
+        this.productName = name;
         this.prices = prices;
         this.priceNew = priceNew;
     }
@@ -60,6 +64,14 @@ public class Product {
 
     public void setPriceInput(float priceInput) {
         this.priceInput = priceInput;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getProvince() {
@@ -143,12 +155,12 @@ public class Product {
         this.madeIn = madeIn;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getDetail() {

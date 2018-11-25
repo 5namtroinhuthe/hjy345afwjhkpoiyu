@@ -8,8 +8,8 @@ public class UserOrderInfo {
 
     private String nameUser;
     private String email;
-    private Long cartId;
-    List<ProductInfo> list;
+    private String productId;
+    private String productName;
 
 
     public UserOrderInfo(Long orderId, String status, String nameUser, String email, List list) {
@@ -17,7 +17,7 @@ public class UserOrderInfo {
         this.status = status;
         this.nameUser = nameUser;
         this.email = email;
-        this.list = list;
+
     }
 
     public UserOrderInfo(Long orderId, String nameUser, String email) {
@@ -31,12 +31,29 @@ public class UserOrderInfo {
         this.nameUser = nameUser;
     }
 
-    public Long getCartId() {
-        return cartId;
+    public UserOrderInfo(Long orderId, String status, String nameUser, String email, String productId, String productName) {
+        this.orderId = orderId;
+        this.status = status;
+        this.nameUser = nameUser;
+        this.email = email;
+        this.productId = productId;
+        this.productName = productName;
     }
 
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Long getOrderId() {

@@ -8,11 +8,7 @@ public class UrlAddress {
     public static final String REGISTER = "/register";
     public static final String LOG_OUT = "/logout";
 
-    public static final String PRODUCT_GET = "/product/get";
-    public static final String PRODUCT_ADD = "/product/add";
-    public static final String PRODUCT_EDIT = "product/edit";
-    public static final String PRODUCT_DELETE = "product/delete/{productId}";
-    public static final String PRODUCT_GET_ID = "/product/getId/{productId}";
+
 
     public static final String ORDER_CART_ID = "/order/{cartId}";
     public static final String ORDER_GMAIL="/order/gmail";

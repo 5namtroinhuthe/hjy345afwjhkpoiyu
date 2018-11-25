@@ -1,14 +1,11 @@
 package com.namvn.shopping.web.controller;
 
-import com.namvn.shopping.persistence.model.ProductInfo;
 import com.namvn.shopping.service.UserService;
 import com.namvn.shopping.social.autologin.Autologin;
 import com.namvn.shopping.persistence.entity.User;
-import com.namvn.shopping.persistence.repository.UserDao;
 import com.namvn.shopping.social.providers.FacebookProvider;
 
 import com.namvn.shopping.web.form.UserDto;
-import com.namvn.shopping.web.url.UrlAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,10 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.thymeleaf.util.StringUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Controller
@@ -75,8 +69,7 @@ public class UserController {
             if (userBean.getPassword().length()>0) {
                 userBean.setPassword(bCryptPasswordEncoder.encode(userBean.getPassword()));
                 userService.registerNewUserAccount(userBean);
-                if (userBean.getUrl().startsWith("/product/getId/"))
-                    return userBean.getUrl();
+
             }
 
         return null;

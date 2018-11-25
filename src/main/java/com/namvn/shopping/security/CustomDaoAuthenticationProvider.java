@@ -18,8 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
     @Autowired
     private UserService userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
@@ -27,16 +27,9 @@ public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
         if ((user == null)) {
             throw new BadCredentialsException("Invalid username or password");
         }
-        // Database Password already encrypted:
-//        String password = user.getPassword();
-//        boolean passwordsMatch = passwordEncoder.matches(auth.getCredentials().toString(), password);
-//        if (!passwordsMatch) {
-//            throw new BadCredentialsException("Invalid username or password");
-//        }
-//
        else {
             Authentication result = super.authenticate(auth);
-            return new UsernamePasswordAuthenticationToken(user, result.getCredentials(), result.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(user.getEmail(), result.getCredentials(), result.getAuthorities());
 
         }
     }

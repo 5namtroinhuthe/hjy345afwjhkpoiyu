@@ -80,4 +80,12 @@ public class Cart {
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
     }
+
+    public UserOrder getUserOrder() {
+        return userOrder;
+    }
+
+    public void setUserOrder(UserOrder userOrder) {
+        this.userOrder = userOrder;
+    }
 }

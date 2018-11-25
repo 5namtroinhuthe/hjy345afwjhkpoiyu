@@ -2,8 +2,6 @@ package com.namvn.shopping.persistence.repository;
 
 import com.namvn.shopping.pagination.PagingResult;
 import com.namvn.shopping.persistence.entity.Company;
-import com.namvn.shopping.persistence.model.ProductInfo;
-import com.namvn.shopping.persistence.model.ProductParam;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 

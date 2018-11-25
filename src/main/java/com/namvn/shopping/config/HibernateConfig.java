@@ -35,17 +35,11 @@ public class HibernateConfig {
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
         factoryBean.setDataSource(dataSource());
         Properties props = new Properties();
-
-        // Setting JDBC properties
-        //props.put(DRIVER, env.getProperty("mysql.driver"));
-
-
         // Setting Hibernate properties
         props.put(SHOW_SQL, env.getProperty("hibernate.show_sql"));
         props.put(HBM2DDL_AUTO, env.getProperty("hibernate.hbm2ddl.auto"));
         props.put(DIALECT, env.getProperty("hibernate.dialect"));
         factoryBean.setHibernateProperties(props);
-
         factoryBean.setPackagesToScan(new String[]{"com.namvn.shopping.persistence.entity"});
         return factoryBean;
     }
@@ -53,7 +47,6 @@ public class HibernateConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        //dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
         dataSource.setUrl(env.getProperty("mysql.jdbcUrl"));
         dataSource.setUsername(env.getProperty("mysql.username"));
         dataSource.setPassword(env.getProperty("mysql.password"));

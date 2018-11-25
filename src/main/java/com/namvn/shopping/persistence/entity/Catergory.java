@@ -15,7 +15,7 @@ public class Catergory {
     private String name;
     private String image;
     private int status;
-    @OneToMany(mappedBy = "catergory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "catergory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Product> products;
 
     public Catergory() {

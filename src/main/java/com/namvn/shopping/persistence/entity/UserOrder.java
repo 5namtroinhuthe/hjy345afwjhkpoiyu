@@ -9,7 +9,7 @@ public class UserOrder {
     @Column(name = "order_id",unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
-    private int status;
+    private String status;
     private String verificationCode;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
@@ -39,11 +39,11 @@ public class UserOrder {
         return cart;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

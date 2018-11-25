@@ -1,11 +1,12 @@
 package com.namvn.shopping.service;
 
+import com.namvn.shopping.pagination.PagingResult;
 import com.namvn.shopping.persistence.entity.Cart;
 import com.namvn.shopping.persistence.entity.Product;
 import com.namvn.shopping.persistence.entity.User;
 import com.namvn.shopping.persistence.entity.UserOrder;
-import com.namvn.shopping.persistence.model.ProductInfo;
-import com.namvn.shopping.persistence.model.RevenueInfo;
+import com.namvn.shopping.persistence.model.ProductManager;
+import com.namvn.shopping.persistence.model.SugesstProductImport;
 import com.namvn.shopping.persistence.model.UserOrderInfo;
 import com.namvn.shopping.persistence.repository.CartDao;
 import com.namvn.shopping.persistence.repository.ProductDao;
@@ -20,6 +21,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -81,13 +83,29 @@ public class UserOrderServiceImpl implements UserOrderService {
 
 
     @Override
-    public RevenueInfo getSugesst(String id) {
+    public ArrayList<SugesstProductImport> getSugesst(int page, int limit, int quantity, String sortType, Long catergory) {
+        PagingResult<ProductManager> pagingResult = mProductDao.getListAlmostOverProduct(page, limit, quantity, sortType, catergory);
+        ArrayList<SugesstProductImport> arraylist = new ArrayList<SugesstProductImport>();
+        for (ProductManager productManager :
+                pagingResult.getList()) {
+            String productId = productManager.getProductId();
 
-        long count = mUserOrderDao.calRevenue();
+            Product product = mProductDao.getProductById1(productId);
+            float count = mUserOrderDao.countProductInOder(productManager.getProductId());
+            float revenue = (product.getPriceNew() - product.getPriceInput()) * count;
+            SugesstProductImport sugesstProductImport = new SugesstProductImport
+                    (productId,
+                            productManager.getName(),
+                            null,
+                            productManager.getQuantity(),
+                            count,
+                            revenue
+                    );
+            arraylist.add(sugesstProductImport);
+        }
+        Collections.sort(arraylist);
 
-        Product product = mProductDao.getProductById1(id);
-        float revenue = product.getPriceNew() - product.getPriceInput();
-     return  new RevenueInfo(count,revenue);
+return arraylist;
 
     }
 }

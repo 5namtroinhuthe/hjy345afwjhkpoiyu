@@ -7,7 +7,7 @@ import com.namvn.shopping.persistence.repository.ProductDao;
 import com.namvn.shopping.persistence.entity.Cart;
 import com.namvn.shopping.persistence.entity.CartItem;
 import com.namvn.shopping.persistence.entity.Product;
-import com.namvn.shopping.persistence.model.ProductInfo;
+import com.namvn.shopping.persistence.model.ProductInfoUser;
 import com.namvn.shopping.persistence.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +37,7 @@ public class CartItemServiceImpl implements CartItemService {
         Cart cart = customer.getCart();
         if (cart != null) {
         List<CartItem> cartItems = cart.getCartItems();
-        ProductInfo productInfo = mProductDao.getProductById(productId);
+        ProductInfoUser productInfo = mProductDao.getProductById(productId);
             for (int i = 0; i < cartItems.size(); i++) {
                 CartItem cartItem = cartItems.get(i);
                 if (productInfo.getProductId().equals(cartItem.getProduct().getProductId())) {
@@ -57,7 +57,7 @@ public class CartItemServiceImpl implements CartItemService {
         } else {
             Cart cartTmp=new Cart(0, new Date(), 1, customer);
             mCartDao.save(cartTmp);
-            ProductInfo productInfo = mProductDao.getProductById(productId);
+            ProductInfoUser productInfo = mProductDao.getProductById(productId);
             Product product = new Product(productInfo.getProductId(), productInfo.getName(), productInfo.getPriceNew(), productInfo.getPrices());
             CartItem cartItem = new CartItem();
             cartItem.setQuanlity(1);

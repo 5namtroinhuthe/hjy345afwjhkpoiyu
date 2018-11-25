@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.rememberme.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -56,5 +57,6 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
     private void addCookie(PersistentRememberMeToken token, HttpServletRequest request, HttpServletResponse response) {
         setCookie(new String[]{token.getSeries(), token.getTokenValue()}, getTokenValiditySeconds(), request,
                 response);
+
     }
 }

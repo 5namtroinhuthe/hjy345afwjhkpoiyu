@@ -1,9 +1,9 @@
 package com.namvn.shopping.security.handle;
 
+import com.namvn.shopping.service.JwtService;
 import com.namvn.shopping.persistence.entity.User;
 import com.namvn.shopping.security.ActiveUserStore;
 import com.namvn.shopping.security.listener.LoggedUserSessionListener;
-import com.namvn.shopping.service.TokenAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +23,15 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 
-import static com.namvn.shopping.service.TokenAuthenticationService.HEADER_STRING;
-import static com.namvn.shopping.service.TokenAuthenticationService.TOKEN_PREFIX;
+import static com.namvn.shopping.service.JwtService.HEADER_STRING;
 
 /**
  * class to divide role then call a .html. Order 2
  */
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
+    @Autowired
+    private JwtService csrfTokenRepository;
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     @Autowired
@@ -60,10 +60,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             logger.debug("Response has already been committed to the client. Unable to redirect to " + targetUrl);
             return;
         }
-        String jwt = TokenAuthenticationService.addAuthentication((User) authentication.getPrincipal());
-        // response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + jwt);
-        Cookie cookie = new Cookie(HEADER_STRING, TOKEN_PREFIX + " " + jwt);
-        response.addCookie(cookie);
+        String jwt = JwtService.addAuthentication( authentication);
+        if(request.getRequestURL().toString().contains("/user")) response.addHeader(HEADER_STRING, jwt);
+        //"XSRF-TOKEN"
+        else response.addCookie(new Cookie(HEADER_STRING,jwt));
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 

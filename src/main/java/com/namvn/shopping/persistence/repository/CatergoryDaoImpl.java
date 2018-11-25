@@ -1,13 +1,11 @@
 package com.namvn.shopping.persistence.repository;
 
 import com.namvn.shopping.persistence.entity.Catergory;
-import com.namvn.shopping.util.constant.CatergoryConstant;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,6 +14,7 @@ import javax.persistence.criteria.Root;
 @Repository
 
 public class CatergoryDaoImpl implements CatergoryDao {
+    public static final String NAME="name";
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -42,7 +41,7 @@ public class CatergoryDaoImpl implements CatergoryDao {
         CriteriaQuery<Catergory> criteriaQuery=criteriaBuilder.createQuery(Catergory.class);
         Root<Catergory> root=criteriaQuery.from(Catergory.class);
         criteriaQuery.select(root);
-        criteriaQuery.where(criteriaBuilder.equal(root.get(CatergoryConstant.NAME),name));
+        criteriaQuery.where(criteriaBuilder.equal(root.get(NAME),name));
         Query<Catergory> query=session.createQuery(criteriaQuery);
         Catergory catergory=query.getSingleResult();
         session.get(Catergory.class,catergory.getCatergoryId());

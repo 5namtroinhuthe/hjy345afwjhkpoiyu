@@ -7,7 +7,7 @@ public class ProductContants {
     public static final String PRICE_DATE = "price_date";
     //---------PRODUCT PREDICATE
     public static final String PRODUCT_ID = "productId";
-    public static final String NAME = "name";
+    public static final String NAME = "productName";
     public static final String PRICE_NEW = "priceNew";
     public static final String PRICES = "prices";
     public static final String COLOR = "color";
@@ -16,6 +16,9 @@ public class ProductContants {
     public static final String MATERIAL = "material";
     public static final String MADEIN = "madeIn";
     public static final String IMAGE = "image";
+    public static final String QUANTITY="quantity";
+    public static final String  CATERGORY="catergory";
+    public static final String CATERGORY_ID="catergoryId";
     //--------------PARAM
     public static final String KEY_SORT_TYPE="sortType";
     public static final String KEY_MAX="max";

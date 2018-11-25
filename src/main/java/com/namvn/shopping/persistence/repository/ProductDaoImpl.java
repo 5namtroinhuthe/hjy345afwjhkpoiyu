@@ -1,10 +1,13 @@
 package com.namvn.shopping.persistence.repository;
 
 import com.namvn.shopping.pagination.PagingResult;
+import com.namvn.shopping.persistence.entity.Catergory;
 import com.namvn.shopping.persistence.entity.Product;
 
 import com.namvn.shopping.persistence.model.ProductInfo;
-import com.namvn.shopping.persistence.model.ProductParam;
+import com.namvn.shopping.persistence.model.ProductInfoUser;
+import com.namvn.shopping.persistence.model.ProductManager;
+import com.namvn.shopping.persistence.model.ProductRequestParam;
 
 import com.namvn.shopping.util.CriteriaSkeleton;
 import com.namvn.shopping.util.PreprocessingInput;
@@ -35,12 +38,12 @@ public class ProductDaoImpl implements ProductDao {
      *
      * @return CriteriaQuery
      */
-    public CriteriaQuery<ProductInfo> queryPredicatesBetweenPriceOrNomal(CriteriaSkeleton criteriaSkeleton,
-                                                                         ProductParam productParam,
-                                                                         int parameter,
-                                                                         Predicate predicates[]) {
+    public CriteriaQuery<ProductInfoUser> queryPredicatesBetweenPriceOrNomal(CriteriaSkeleton criteriaSkeleton,
+                                                                             ProductRequestParam productParam,
+                                                                             int parameter,
+                                                                             Predicate predicates[]) {
         CriteriaBuilder builder = criteriaSkeleton.getCriteriaBuilder();
-        CriteriaQuery<ProductInfo> criteriaQuery = criteriaSkeleton.getCriteriaQuery();
+        CriteriaQuery<ProductInfoUser> criteriaQuery = criteriaSkeleton.getCriteriaQuery();
         Root<Product> root = criteriaSkeleton.getRoot();
         float min_price = productParam.getMinPrice();
         float max_price = productParam.getMaxPrice();
@@ -80,9 +83,9 @@ public class ProductDaoImpl implements ProductDao {
      *
      * @return CriteriaQuery
      */
-    public CriteriaQuery<ProductInfo> queryBetweenPrice(CriteriaSkeleton criteriaSkeleton, float min, float max) {
+    public CriteriaQuery<ProductInfoUser> queryBetweenPrice(CriteriaSkeleton criteriaSkeleton, float min, float max) {
         CriteriaBuilder builder = criteriaSkeleton.getCriteriaBuilder();
-        CriteriaQuery<ProductInfo> criteriaQuery = criteriaSkeleton.getCriteriaQuery();
+        CriteriaQuery<ProductInfoUser> criteriaQuery = criteriaSkeleton.getCriteriaQuery();
         Root<Product> root = criteriaSkeleton.getRoot();
         criteriaQuery.where(builder.between(root.get(PRICE_NEW), min, max));
         return criteriaQuery;
@@ -139,10 +142,10 @@ public class ProductDaoImpl implements ProductDao {
         return null;
     }
 
-    public CriteriaQuery<ProductInfo> queryOrderdPredicatesBySortType(CriteriaSkeleton criteriaSkeleton,
-                                                                      String sortType) {
+    public CriteriaQuery<ProductInfoUser> queryOrderdPredicatesBySortType(CriteriaSkeleton criteriaSkeleton,
+                                                                          String sortType) {
         CriteriaBuilder builder = criteriaSkeleton.getCriteriaBuilder();
-        CriteriaQuery<ProductInfo> criteriaQuery = criteriaSkeleton.getCriteriaQuery();
+        CriteriaQuery<ProductInfoUser> criteriaQuery = criteriaSkeleton.getCriteriaQuery();
         Root<Product> root = criteriaSkeleton.getRoot();
 
         if (sortType.equals(PRICE_DATE)) {
@@ -157,7 +160,7 @@ public class ProductDaoImpl implements ProductDao {
 
 
     @Override
-    public Query<ProductInfo> queryByPredicates(Session session, ProductParam productParam) {
+    public Query<ProductInfoUser> queryByPredicates(Session session, ProductRequestParam productParam) {
         String sortType = productParam.getSortType();
         float min_price = productParam.getMinPrice();
         float max_price = productParam.getMaxPrice();
@@ -165,7 +168,7 @@ public class ProductDaoImpl implements ProductDao {
         Map paramMap = new PreprocessingInput().filterLeftRequestParam(min_price, max_price, sortType);
 
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ProductInfo> criteriaQuery = builder.createQuery(ProductInfo.class);
+        CriteriaQuery<ProductInfoUser> criteriaQuery = builder.createQuery(ProductInfoUser.class);
         Root<Product> root = criteriaQuery.from(Product.class);
         criteriaQuery.multiselect(
                 root.get(ProductContants.PRODUCT_ID),
@@ -174,7 +177,7 @@ public class ProductDaoImpl implements ProductDao {
                 root.get(ProductContants.PRICES),
                 root.get(ProductContants.PRICE_NEW),
                 root.get(ProductContants.MANUFACTURER));
-        Query<ProductInfo> query = null;
+        Query<ProductInfoUser> query = null;
         int mapSize = predicateMap.size();
         int paramSize = paramMap.size();
         if (mapSize == 0 && paramSize == 0) {
@@ -233,22 +236,53 @@ public class ProductDaoImpl implements ProductDao {
 
 
     @Override
-    public PagingResult<ProductInfo> getQueryByDetail(int page, int limit, ProductParam productParam) {
+    public PagingResult<ProductInfoUser> getQueryByDetail(int page, int limit, ProductRequestParam productParam) {
         Session session = sessionFactory.getCurrentSession();
-        Query<ProductInfo> productQuery = queryByPredicates(session, productParam);
-        return new PagingResult<ProductInfo>(productQuery, page, limit);
+        Query<ProductInfoUser> productQuery = queryByPredicates(session, productParam);
+        return new PagingResult<>(productQuery, page, limit);
     }
 
     @Override
-    public ProductInfo getProductById(String productId) {
+    public Query<ProductManager> findAlmostOverProduct(Session session, int quantity, String sortType, Long catergory) {
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ProductManager> criteriaQuery = builder.createQuery(ProductManager.class);
+//        Root<Product> productRoot = criteriaQuery.from(Product.class);
+        //Bang nao thu 1 thi phai truy cap vao thuoc tinh bang thu 2
+        Root<Catergory> catergoryRoot = criteriaQuery.from(Catergory.class);
+        Join<Catergory, Product> joinProducts = catergoryRoot.join("products");
+        Predicate predicate[] = new Predicate[2];
+        Expression quantityExpression = joinProducts.get(QUANTITY);
+//
+        predicate[0] = builder.lessThanOrEqualTo(quantityExpression, quantity);
+        predicate[1] = builder.equal(joinProducts.get(NAME), catergory);
+
+        criteriaQuery.multiselect(joinProducts.get(PRODUCT_ID), joinProducts.get(NAME), quantityExpression)
+                .where(builder.and(predicate[0]), predicate[1]);
+        if (sortType == "asc") criteriaQuery.orderBy(builder.asc(joinProducts.get(PRODUCT_ID)));
+        else criteriaQuery.orderBy(builder.desc(joinProducts.get(PRODUCT_ID)));
+        Query<ProductManager> query = session.createQuery(criteriaQuery);
+        return query;
+    }
+
+    @Override
+    public PagingResult<ProductManager> getListAlmostOverProduct(int page, int limit, int quantity, String sortType, Long catergory) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<ProductManager> productQuery = findAlmostOverProduct(session, quantity, sortType, catergory);
+        return new PagingResult<ProductManager>(productQuery, page, limit);
+    }
+
+    @Override
+    public ProductInfoUser getProductById(String productId) {
         // Reading the records from the table
         Session session = sessionFactory.getCurrentSession();
         // select * from Product where isbn=i
         Product product = session.get(Product.class, productId);
 
-        return new ProductInfo(product.getName(),product.getImage(),product.getDetail(),product.getPriceNew(),product.getPrices(),product.getManufacturer(),product.getSize(),product.getColor(),product.getProductId());
+        return new ProductInfoUser(product.getProductName(), product.getImage(), product.getDetail(), product.getPriceNew(), product.getPrices(), product.getManufacturer(), product.getSize(), product.getColor(), product.getProductId());
 
     }
+
     @Override
     public Product getProductById1(String productId) {
         // Reading the records from the table
@@ -256,9 +290,10 @@ public class ProductDaoImpl implements ProductDao {
         // select * from Product where isbn=i
         Product product = session.get(Product.class, productId);
 
-       return product;
+        return product;
 
     }
+
     @Override
     public void deleteProduct(String productId) {
         Session session = sessionFactory.getCurrentSession();

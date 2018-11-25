@@ -2,7 +2,7 @@ package com.namvn.shopping.persistence.model;
 
 import java.util.List;
 
-public class ProductParam {
+public class ProductRequestParam {
     private String sortType;
     private float minPrice;
     private float maxPrice;
@@ -12,7 +12,7 @@ public class ProductParam {
     private List<String> materials;
     private List<String> madeIns;
 
-    public ProductParam(String sortType, float minPrice, float maxPrice, List<String> colors, List<String> sizes, List<String> manufacturers, List<String> materials, List<String> madeIns) {
+    public ProductRequestParam(String sortType, float minPrice, float maxPrice, List<String> colors, List<String> sizes, List<String> manufacturers, List<String> materials, List<String> madeIns) {
         this.sortType = sortType;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;

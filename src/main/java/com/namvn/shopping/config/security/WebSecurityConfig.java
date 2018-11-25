@@ -14,12 +14,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,11 +42,13 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.namvn.shopping.service.JwtService.HEADER_STRING;
 
 //@formatter:off
 @Configuration
@@ -55,8 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
-    @Autowired
-    private DataSource dataSource;
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
     @Autowired
@@ -223,54 +225,65 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().
-                authorizeRequests().
-                antMatchers("/css/**",
-                        "/connect/**",
-                        UrlAddress.PRODUCT_GET,
-                        UrlAddress.PRODUCT_GET_ID)
-                .permitAll();
-        http.antMatcher("/rest/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint())
+
+        http.csrf().disable()
+                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler())
+                .authenticationEntryPoint(restServicesEntryPoint())
                 .and()
                 .sessionManagement()
-                .invalidSessionUrl("/invalidSession.html")
-                .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
-                .sessionFixation().none().and().authorizeRequests()
-//                .antMatchers("/secure/**").anonymous()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/css/**",
+                        "/connect/**",
+                        UrlAddress.PRODUCT_GET + "/**",
+                        "/product/get?page=1",
+                        UrlAddress.PRODUCT_GET_ID + "/**")
+                .permitAll()
+                .anyRequest().authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers(UrlAddress.CART_ADD_PRODUCT_ID,
                         UrlAddress.CART_GET_ID,
                         UrlAddress.CART_DELETE_CARTITEM_ID)
-                .hasRole("ROLE_USER")
+                .hasRole("USER")
                 .antMatchers("/user/updatePassword*", "/user/savePassword*", "/updatePassword*")
                 .hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
 
                 .and()
                 .formLogin()
                 .loginPage(UrlAddress.PRODUCT_GET_ID)
-//                .defaultSuccessUrl("/cart.html")
-//                .failureUrl("/login-error")
+                .defaultSuccessUrl("/index.html")
+                .failureUrl("/login-error")
                 .usernameParameter("email")//
                 .passwordParameter("password")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
                 .permitAll()
 
-                .and()
-                .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler())
-                .and()
+
+//
+//
+//                .and()
+
+//        http.antMatcher("/rest/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint())
+
+//                .antMatchers("/secure/**").anonymous()
 
 
+                .and()
                 .logout()
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .invalidateHttpSession(false)
                 .logoutSuccessUrl("/logout.html?logSucc=true")
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID",HEADER_STRING)
                 .permitAll()
 
                 .and()
-
                 .rememberMe().rememberMeServices(rememberMeServices()).key("theKey");
+
+        http.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+
     }
 
     @Override
@@ -278,15 +291,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
-    //	@Override
-//	protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-//		auth.userDetailsService(userDetailsService)
-//				.passwordEncoder(bCryptPasswordEncoder())
-//				.and()
-//				.authenticationProvider(authenticationProvider())
-//				.jdbcAuthentication()
-//				.dataSource(dataSource);
-//	}
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -310,11 +314,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", userDetailsService, new InMemoryTokenRepositoryImpl());
         return rememberMeServices;
     }
-//	@Autowired
-//	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-//	}
 
 }
 
-// @formatter:on

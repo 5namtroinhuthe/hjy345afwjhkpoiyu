@@ -1,17 +1,12 @@
 package com.namvn.shopping.persistence.repository;
 
 import com.namvn.shopping.pagination.PagingResult;
-import com.namvn.shopping.persistence.entity.Catergory;
 import com.namvn.shopping.persistence.entity.Company;
-import com.namvn.shopping.persistence.entity.Product;
-import com.namvn.shopping.persistence.model.ProductInfo;
-import com.namvn.shopping.util.constant.CatergoryConstant;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
